@@ -70,7 +70,7 @@ userSchema.pre('save', function(next) {
   next();
 });
 
-//middleware to not find (or log in) users who are inactive
+//middleware to not find (or log in) users who are inactive (deleted)
 userSchema.pre(/^find/, function(next) {
   this.find({ active: { $ne: false } });
   next();

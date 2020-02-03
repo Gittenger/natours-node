@@ -32,6 +32,7 @@ exports.getAllTours = catchAsync(async (req, res, next) => {
 });
 
 exports.getTour = catchAsync(async (req, res, next) => {
+  //when query is executed, guides field is populated in result
   const tour = await Tour.findById(req.params.id);
 
   if (!tour) {

@@ -89,14 +89,12 @@ const tourSchema = new mongoose.Schema(
       default: false
     },
     startLocation: {
-      //GeoJSON
-      //default is always point, but you can use polygons, etc
       type: {
         type: String,
         default: 'Point',
         enum: ['Point']
       },
-      //long first, lat second in GeoJSON
+      //long first, lat second
       coordinates: [Number],
       address: String,
       description: String
@@ -113,7 +111,8 @@ const tourSchema = new mongoose.Schema(
         description: String,
         day: Number
       }
-    ]
+    ],
+    guides: [{ type: mongoose.Schema.ObjectId, ref: 'User' }]
   },
   {
     toJSON: { virtuals: true },
@@ -134,6 +133,7 @@ tourSchema.pre('save', function(next) {
 });
 
 //QUERY MIDDLEWARE // "this" points at current query
+//exclude secretTour field, and create field for when query was executed (for logging)
 tourSchema.pre(/^find/, function(next) {
   this.find({ secretTour: { $ne: true } });
 
@@ -141,6 +141,16 @@ tourSchema.pre(/^find/, function(next) {
   next();
 });
 
+//populate guides field
+tourSchema.pre(/^find/, function(next) {
+  this.populate({
+    path: 'guides',
+    select: '-__v -passwordChangedAt'
+  });
+  next();
+});
+
+//time log for how long query took
 tourSchema.post(/^find/, function(docs, next) {
   console.log(`Query took ${Date.now() - this.start}ms`);
   next();
