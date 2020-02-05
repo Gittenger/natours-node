@@ -20,14 +20,17 @@ const { protect, restrictTo } = authController;
 ////
 //ROUTE MIDDLEWARE
 //
+//PROTECT ALL ROUTES
+router.use(protect);
+
 router
   .route('/')
   .get(getAllReviews)
-  .post(protect, restrictTo('user'), setTourAndUserId, createReview);
+  .post(restrictTo('user'), setTourAndUserId, createReview);
 router
   .route('/:id')
   .get(updateReview)
-  .patch(updateReview)
-  .delete(deleteReview);
+  .patch(restrictTo('user', 'admin'), updateReview)
+  .delete(restrictTo('user', 'admin'), deleteReview);
 
 module.exports = router;

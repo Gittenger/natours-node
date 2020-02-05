@@ -22,23 +22,30 @@ const {
   protect,
   forgotPassword,
   resetPassword,
-  updatePassword
+  updatePassword,
+  restrictTo
 } = authController;
 
 ////
 //ROUTE MIDDLEWARE
 //
-//AUTH
+//AUTH, UNPROTECTED ROUTES
 router.post('/signup', signup);
 router.post('/login', login);
 router.post('/forgotPassword', forgotPassword);
 router.patch('/resetPassword/:token', resetPassword);
-router.patch('/updateMyPassword', protect, updatePassword);
+
+//PROTECT ALL ROUTES AFTER THIS MIDDLEWARE
+router.use(protect);
 
 //ME
-router.get('/me', protect, getMe, getUser);
-router.patch('/updateMe', protect, updateMe);
-router.patch('/deleteMe', protect, deleteMe);
+router.patch('/updateMyPassword', updatePassword);
+router.get('/me', getMe, getUser);
+router.patch('/updateMe', updateMe);
+router.patch('/deleteMe', deleteMe);
+
+//RESTRICT FOLLOWING ROUTES TO ADMINS ONLY
+router.use(restrictTo('admin'));
 
 //OTHER CRUD ROUTES
 router.route('/').get(getAllUsers);

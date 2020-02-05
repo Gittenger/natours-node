@@ -31,18 +31,20 @@ router.route('/top-5-cheap').get(aliasTopTours, getAllTours);
 //overall tour stats
 router.route('/tour-stats').get(getTourStats);
 //optimal monthly plan for a given year
-router.route('/monthly-plan/:year').get(getMonthlyPlan);
+router
+  .route('/monthly-plan/:year')
+  .get(protect, restrictTo('lead-guide', 'admin', 'guide'), getMonthlyPlan);
 
 //CRUD ROUTES
 router
   .route('/')
-  .get(protect, getAllTours)
-  .post(createTour);
+  .get(getAllTours)
+  .post(protect, restrictTo('admin', 'lead-guide'), createTour);
 
 router
   .route('/:id')
   .get(getTour)
-  .patch(updateTour)
+  .patch(protect, restrictTo('lead-guide', 'admin'), updateTour)
   .delete(protect, restrictTo('lead-guide', 'admin'), deleteTour);
 
 module.exports = router;
