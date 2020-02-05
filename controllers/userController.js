@@ -22,13 +22,20 @@ exports.createUser = (req, res) => {
 
 //CRUD
 exports.getAllUsers = factory.getAll(User);
-
+//
 //do NOT update passwords with this one
 exports.updateUser = factory.updateOne(User);
 exports.getUser = factory.getOne(User);
 exports.deleteUser = factory.deleteOne(User);
 
 //SPECIAL
+//
+//middleware to pass currently logged in user ID to getOne
+exports.getMe = (req, res, next) => {
+  req.params.id = req.user.id;
+  next();
+};
+
 exports.updateMe = catchAsync(async (req, res, next) => {
   //create error if user POSTS password data
   if (req.body.password || req.body.passwordConfirm) {
