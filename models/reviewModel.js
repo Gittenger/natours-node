@@ -36,12 +36,18 @@ const reviewSchema = new mongoose.Schema(
 //QUERY MIDDLEWARE
 //populate ref fields
 reviewSchema.pre(/^find/, function(next) {
+  // this.populate({
+  //   path: 'user',
+  //   select: 'name'
+  // }).populate({
+  //   path: 'tour',
+  //   select: 'name photo'
+  // });
+  //
+  //turned off tour populate in reviews to prevent populate chaining
   this.populate({
     path: 'user',
     select: 'name'
-  }).populate({
-    path: 'tour',
-    select: 'name photo'
   });
 
   next();

@@ -4,8 +4,12 @@ const APIFeatures = require('../utils/apiFeatures');
 // const AppError = require('../utils/appError');
 
 exports.getAllReviews = catchAsync(async (req, res, next) => {
+  //filter results to only show reviews for queried tour
+  let filter = {};
+  if (req.params.tourId) filter = { tour: req.params.tourId };
+
   //BUILD QUERY
-  const features = new APIFeatures(Review.find(), req.query)
+  const features = new APIFeatures(Review.find(filter), req.query)
     .filter()
     .sort()
     .limitFields()
@@ -23,6 +27,9 @@ exports.getAllReviews = catchAsync(async (req, res, next) => {
 });
 
 exports.createReview = catchAsync(async (req, res, next) => {
+  if (!req.body.tour) req.body.tour = req.params.tourId;
+  if (!req.body.user) req.body.user = req.user.id;
+
   const newReview = await Review.create(req.body);
 
   res.status(201).json({

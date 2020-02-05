@@ -1,8 +1,13 @@
 const express = require('express');
 const tourController = require('./../controllers/tourController');
 const authController = require('./../controllers/authController');
+const reviewController = require('./../controllers/reviewController');
+const reviewRouter = require('../routes/reviewRoutes');
 
 const router = express.Router();
+
+//reroute to reviews route if creating review on tour
+router.use('/:tourId/reviews', reviewRouter);
 
 const {
   getAllTours,
@@ -16,6 +21,9 @@ const {
 } = tourController;
 
 const { protect, restrictTo } = authController;
+
+const { createReview } = reviewController;
+
 // //param middleware for id param
 // router.param('id', checkID);
 

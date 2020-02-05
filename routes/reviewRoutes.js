@@ -2,7 +2,8 @@ const express = require('express');
 const reviewController = require('./../controllers/reviewController');
 const authController = require('./../controllers/authController');
 
-const router = express.Router();
+//mergeParams will give access to params from earlier in URL from re-routing
+const router = express.Router({ mergeParams: true });
 
 const { getAllReviews, createReview } = reviewController;
 const { protect, restrictTo } = authController;
