@@ -50,19 +50,19 @@ const userSchema = new mongoose.Schema({
   }
 });
 
-//pre-save middleware to encrypt password if password field is first set or changed
+// pre-save middleware to encrypt password if password field is first set or changed
 userSchema.pre('save', async function(next) {
-  //exit middleware if password not modified
+  // exit middleware if password not modified
   if (!this.isModified('password')) return next();
 
-  //encrypt PW for db storage... cost = 12
+  // encrypt PW for db storage... cost = 12
   this.password = await bcrypt.hash(this.password, 12);
 
-  //clear pw confirm field
+  // clear pw confirm field
   this.passwordConfirm = undefined;
 });
 
-//middleware to edit changePasswordAt anytime password is changed
+// middleware to edit changePasswordAt anytime password is changed
 userSchema.pre('save', function(next) {
   if (!this.isModified('password') || this.isNew) return next();
 
