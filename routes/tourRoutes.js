@@ -1,14 +1,15 @@
 const express = require('express');
+const reviewRouter = require('../routes/reviewRoutes');
 const tourController = require('./../controllers/tourController');
 const authController = require('./../controllers/authController');
-const reviewController = require('./../controllers/reviewController');
-const reviewRouter = require('../routes/reviewRoutes');
 
+//INITIALIZE ROUTER
 const router = express.Router();
 
 //reroute to reviews route if creating review on tour
 router.use('/:tourId/reviews', reviewRouter);
 
+//METHOD DEPENDENCIES
 const {
   getAllTours,
   createTour,
@@ -22,16 +23,17 @@ const {
 
 const { protect, restrictTo } = authController;
 
-const { createReview } = reviewController;
-
-// //param middleware for id param
-// router.param('id', checkID);
-
+////
+//ROUTE MIDDLEWARE
+//
+//show top five tours
 router.route('/top-5-cheap').get(aliasTopTours, getAllTours);
-
+//overall tour stats
 router.route('/tour-stats').get(getTourStats);
+//optimal monthly plan for a given year
 router.route('/monthly-plan/:year').get(getMonthlyPlan);
 
+//CRUD ROUTES
 router
   .route('/')
   .get(protect, getAllTours)
