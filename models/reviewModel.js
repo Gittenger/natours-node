@@ -34,7 +34,9 @@ const reviewSchema = new mongoose.Schema(
   }
 );
 
-//QUERY MIDDLEWARE
+//every combination of tour/user will be unique, to prevent duplicate reviews
+reviewSchema.index({ tour: 1, user: 1 }, { unique: true });
+
 //populate ref fields
 reviewSchema.pre(/^find/, function(next) {
   // this.populate({
@@ -70,18 +72,39 @@ reviewSchema.statics.calcAverageRatings = async function(tourId) {
     }
   ]);
 
-  //assign calc'd stats to matching Tour doc
-  await Tour.findByIdAndUpdate(tourId, {
-    ratingsQuantity: stats[0].nRating,
-    ratingsAverage: stats[0].avgRating
-  });
+  if (stats.length > 0) {
+    //assign calc'd stats to matching Tour doc
+    await Tour.findByIdAndUpdate(tourId, {
+      ratingsQuantity: stats[0].nRating,
+      ratingsAverage: stats[0].avgRating
+    });
+  } else {
+    //assign calc'd stats to matching Tour doc
+    await Tour.findByIdAndUpdate(tourId, {
+      ratingsQuantity: 0,
+      ratingsAverage: 4.5
+    });
+  }
 };
 
 //POST-SAVE MIDDLEWARE (NO ACCESS TO NEXT)
-//middleware to perform avg ratings calc every time (after) a new review is saved
+//middleware for avg ratings calc every time (after) a new review is saved
 reviewSchema.post('save', function() {
   //using this.constructor to access static method
   this.constructor.calcAverageRatings(this.tour);
+});
+
+//middleware for saving currently queried doc
+reviewSchema.pre(/^findOneAnd/, async function(next) {
+  //find current doc, save it as a virtual field
+  this.virtualReview = await this.findOne();
+  next();
+});
+
+reviewSchema.post(/^findOneAnd/, async function(next) {
+  await this.virtualReview.constructor.calcAverageRatings(
+    this.virtualReview.tour
+  );
 });
 
 const Review = mongoose.model('Review', reviewSchema);
