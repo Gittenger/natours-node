@@ -10,6 +10,7 @@ exports.getAll = Model =>
     if (req.params.tourId) filter = { tour: req.params.tourId };
 
     //BUILD QUERY
+    //returns "this" (query)
     const features = new APIFeatures(Model.find(filter), req.query)
       .filter()
       .sort()
@@ -18,6 +19,8 @@ exports.getAll = Model =>
 
     //EXECUTE QUERY
     const docs = await features.query;
+    //use explain() to get detailed results for performance evaluation
+    // const docs = await features.query.explain();
 
     //send response
     res.status(200).json({

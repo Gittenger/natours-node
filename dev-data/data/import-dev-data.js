@@ -44,6 +44,7 @@ const importData = async () => {
     await User.create(users, { validateBeforeSave: false });
     //users in dev-data already have encrypted pw. comment out relevant code
     //in user model during import to skip encryption and pw-changed-at field
+    //pw for all users is test1234
 
     console.log('Data successfully loaded');
     process.exit();
