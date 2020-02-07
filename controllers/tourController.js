@@ -1,6 +1,7 @@
 const Tour = require('./../models/tourModel');
 const catchAsync = require('../utils/catchAsync');
 const factory = require('./_handlerFactory');
+const AppError = require('../utils/appError');
 
 //CRUD
 exports.getAllTours = factory.getAll(Tour);
@@ -109,3 +110,37 @@ exports.aliasTopTours = (req, res, next) => {
 
   next();
 };
+
+exports.getToursWithin = catchAsync(async (req, res, next) => {
+  const { distance, latlng, unit } = req.params;
+  const [lat, lng] = latlng.split(',');
+
+  //convert to radians
+  const radius = unit === 'mi' ? distance / 3963.2 : distance / 6378.1;
+
+  if (!lat || !lng) {
+    next(
+      new AppError(
+        'Please provide latitude and longitude in the form of lat,lng',
+        400
+      )
+    );
+  }
+
+  //geoJSON is in lng,lat format
+  const tours = await Tour.find({
+    startLocation: {
+      $geoWithin: {
+        $centerSphere: [[lng, lat], radius]
+      }
+    }
+  });
+
+  res.status(200).json({
+    status: 'success',
+    results: tours.length,
+    data: {
+      data: tours
+    }
+  });
+});
