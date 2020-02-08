@@ -19,7 +19,8 @@ const {
   aliasTopTours,
   getTourStats,
   getMonthlyPlan,
-  getToursWithin
+  getToursWithin,
+  getDistances
 } = tourController;
 
 const { protect, restrictTo } = authController;
@@ -36,10 +37,14 @@ router
   .route('/monthly-plan/:year')
   .get(protect, restrictTo('lead-guide', 'admin', 'guide'), getMonthlyPlan);
 
-//NY coords == 40.7128,-74.0060
+//tours within distance
+//ex: NY coords == 40.7128,-74.0060
 router
   .route('/tours-within/:distance/center/:latlng/unit/:unit')
   .get(getToursWithin);
+
+//calculate distance of tours from a point
+router.route('/distances/:latlng/unit/:unit').get(getDistances);
 
 //CRUD ROUTES
 router

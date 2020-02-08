@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const slugify = require('slugify');
-const validator = require('validator');
+// const validator = require('validator');
 
 //define schema
 const tourSchema = new mongoose.Schema(
@@ -169,8 +169,18 @@ tourSchema.post(/^find/, function(docs, next) {
   next();
 });
 
-//AGGREGATION MIDDLEWARE // this points to current aggregation object
+//AGGREGATION MIDDLEWARE // "this" points to current aggregation object
 tourSchema.pre('aggregate', function(next) {
+  const firstInPipeline = this.pipeline()[0];
+  // eslint-disable-next-line no-prototype-builtins
+  if (firstInPipeline.hasOwnProperty('$geoNear')) {
+    //don't match secret tours, but splice "$match" stage after $geoNear in pipeline
+    this.pipeline().splice(1, 0, {
+      $match: { secretTour: { $ne: true } }
+    });
+    return next();
+  }
+
   this.pipeline().unshift({ $match: { secretTour: { $ne: true } } });
   // console.log(this.pipeline());
   next();
