@@ -116,7 +116,13 @@ exports.getToursWithin = catchAsync(async (req, res, next) => {
   const [lat, lng] = latlng.split(',');
 
   //convert to radians
-  const radius = unit === 'mi' ? distance / 3963.2 : distance / 6378.1;
+  const radius =
+    // eslint-disable-next-line no-nested-ternary
+    unit === 'mi'
+      ? distance / 3963.2
+      : unit === 'km'
+      ? distance / 6378.1
+      : next(new AppError('Unknown unit, please use mi or km', 400));
 
   if (!lat || !lng) {
     next(

@@ -4,6 +4,7 @@ const authController = require('./../controllers/authController');
 
 //INITIALIZE ROUTER
 //mergeParams will give access to params from earlier in URL from re-routing
+//for creating review on tour
 const router = express.Router({ mergeParams: true });
 
 //METHOD DEPENDENCIES
