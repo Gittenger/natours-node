@@ -599,12 +599,37 @@ body {
   );
 }
 
+/* SCROLLBAR SETTINGS */
+/* width */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: rgba(136, 136, 136, 0.781);
+  border-radius: 6px;
+  width: 6px;
+  height: 6px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
 .reviews {
   padding: 5rem 0;
   display: grid;
   grid-column-gap: 6rem;
   grid-auto-flow: column;
-  overflow-x: scroll;
+  overflow-x: auto;
   -ms-scroll-snap-type: x mandatory;
   scroll-snap-type: x mandatory;
 }

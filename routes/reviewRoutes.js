@@ -9,6 +9,7 @@ const router = express.Router({ mergeParams: true });
 
 //METHOD DEPENDENCIES
 const {
+  getReview,
   getAllReviews,
   createReview,
   setTourAndUserId,
@@ -30,7 +31,7 @@ router
   .post(restrictTo('user'), setTourAndUserId, createReview);
 router
   .route('/:id')
-  .get(updateReview)
+  .get(getReview)
   .patch(restrictTo('user', 'admin'), updateReview)
   .delete(restrictTo('user', 'admin'), deleteReview);
 

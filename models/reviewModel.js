@@ -50,7 +50,7 @@ reviewSchema.pre(/^find/, function(next) {
   //turned off tour populate in reviews to prevent populate chaining
   this.populate({
     path: 'user',
-    select: 'name'
+    select: 'name photo'
   });
 
   next();
