@@ -49,6 +49,12 @@ app.use(
     limit: '10kb'
   })
 );
+app.use(
+  express.urlencoded({
+    extended: true,
+    limit: '10kb'
+  })
+);
 app.use(cookieParser());
 
 //DEFEND AGAINST NOSQL QUERY INJECTION
@@ -80,7 +86,7 @@ app.use((req, res, next) => {
 //create request time field for use in responses
 app.use((req, res, next) => {
   req.requestTime = new Date().toISOString();
-  console.log(req.cookies);
+  // console.log(req.cookies);
   next();
 });
 
