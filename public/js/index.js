@@ -10,6 +10,7 @@ const mapBox = document.getElementById('map');
 const loginForm = document.querySelector('.form--login');
 const logoutBtn = document.querySelector('.nav__el--logout');
 const userSettingsForm = document.querySelector('.form-user-data');
+const userPasswordForm = document.querySelector('.form-user-password');
 
 //DELEGATION
 if (mapBox) {
@@ -35,6 +36,34 @@ if (userSettingsForm) {
     e.preventDefault();
     const name = userSettingsForm.querySelector('#name').value;
     const email = userSettingsForm.querySelector('#email').value;
-    updateSettings(name, email);
+    updateSettings({ name, email }, 'data');
+  });
+}
+
+if (userPasswordForm) {
+  userPasswordForm.addEventListener('submit', async e => {
+    e.preventDefault();
+    userPasswordForm.querySelector('.btn--save-password').textContent =
+      'Updating...';
+
+    //getting values
+    const passwordCurrent = userPasswordForm.querySelector('#password-current')
+      .value;
+    const password = userPasswordForm.querySelector('#password').value;
+    const passwordConfirm = userPasswordForm.querySelector('#password-confirm')
+      .value;
+
+    //update db
+    await updateSettings(
+      { passwordCurrent, password, passwordConfirm },
+      'password'
+    );
+
+    //reset values of password form input fields after update
+    userPasswordForm.querySelector('.btn--save-password').textContent =
+      'Save password';
+    userPasswordForm.querySelector('#password-current').value = '';
+    userPasswordForm.querySelector('#password').value = '';
+    userPasswordForm.querySelector('#password-confirm').value = '';
   });
 }
