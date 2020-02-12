@@ -14,7 +14,8 @@ const {
   getMe,
   updateMe,
   deleteMe,
-  uploadUserPhoto
+  uploadUserPhoto,
+  resizeUserPhoto
 } = userController;
 
 const {
@@ -44,7 +45,7 @@ router.use(protect);
 //ME
 router.patch('/updateMyPassword', updatePassword);
 router.get('/me', getMe, getUser);
-router.patch('/updateMe', uploadUserPhoto, updateMe);
+router.patch('/updateMe', uploadUserPhoto, resizeUserPhoto, updateMe);
 router.patch('/deleteMe', deleteMe);
 
 //RESTRICT FOLLOWING ROUTES TO ADMINS ONLY
