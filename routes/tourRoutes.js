@@ -20,7 +20,9 @@ const {
   getTourStats,
   getMonthlyPlan,
   getToursWithin,
-  getDistances
+  getDistances,
+  uploadTourImages,
+  resizeTourImages
 } = tourController;
 
 const { protect, restrictTo } = authController;
@@ -55,7 +57,13 @@ router
 router
   .route('/:id')
   .get(getTour)
-  .patch(protect, restrictTo('lead-guide', 'admin'), updateTour)
+  .patch(
+    protect,
+    restrictTo('lead-guide', 'admin'),
+    uploadTourImages,
+    resizeTourImages,
+    updateTour
+  )
   .delete(protect, restrictTo('lead-guide', 'admin'), deleteTour);
 
 module.exports = router;

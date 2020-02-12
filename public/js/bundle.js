@@ -8919,13 +8919,13 @@ if (logoutBtn) {
 
 if (userSettingsForm) {
   userSettingsForm.addEventListener('submit', function (e) {
-    e.preventDefault();
-    var name = userSettingsForm.querySelector('#name').value;
-    var email = userSettingsForm.querySelector('#email').value;
-    (0, _updateSettings.updateSettings)({
-      name: name,
-      email: email
-    }, 'data');
+    e.preventDefault(); //construct multipart form data
+
+    var form = new FormData();
+    form.append('name', userSettingsForm.querySelector('#name').value);
+    form.append('email', userSettingsForm.querySelector('#email').value);
+    form.append('photo', userSettingsForm.querySelector('#photo').files[0]);
+    (0, _updateSettings.updateSettings)(form, 'data');
   });
 }
 
@@ -9003,7 +9003,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "63731" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "52058" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
@@ -9180,4 +9180,4 @@ function hmrAcceptRun(bundle, id) {
   }
 }
 },{}]},{},["../../node_modules/parcel-bundler/src/builtins/hmr-runtime.js","index.js"], null)
-//# sourceMappingURL=/bundle.js.map
+//# sourceMappingURL=/js/bundle.js.map
