@@ -1,3 +1,4 @@
+const multer = require('multer');
 const User = require('./../models/userModel');
 const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/appError');
@@ -50,6 +51,7 @@ exports.updateMe = catchAsync(async (req, res, next) => {
   //update user document
   //only allow select properties to be changed, filter unwanted object fields
   const filteredBody = filterObj(req.body, 'name', 'email');
+  if (req.file) filteredBody.photo = req.file.filename;
 
   //new option will return the new, updated object
   const updatedUser = await User.findByIdAndUpdate(req.user.id, filteredBody, {
@@ -73,3 +75,30 @@ exports.deleteMe = catchAsync(async (req, res, next) => {
     data: null
   });
 });
+
+//MULTER FOR IMAGE UPLOADS
+//config multer storage
+const multerStorage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, 'public/img/users');
+  },
+  filename: (req, file, cb) => {
+    const ext = file.mimetype.split('/')[1];
+    //create unique filename  user-userid-timestamp
+    cb(null, `user-${req.user.id}-${Date.now()}.${ext}`);
+  }
+});
+//config multer filter
+const multerfilter = (req, file, cb) => {
+  if (file.mimetype.startsWith('image')) {
+    cb(null, true);
+  } else {
+    cb(new AppError('Not an image! Please upload only images', 400), false);
+  }
+};
+//multer with config options
+const upload = multer({
+  storage: multerStorage,
+  filter: multerfilter
+});
+exports.uploadUserPhoto = upload.single('photo');
