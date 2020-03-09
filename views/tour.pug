@@ -9,6 +9,7 @@ mixin overviewBox(label, text, icon)
       span.overview-box__text= text
 
 block append head
+   script(src='https://api.mapbox.com/mapbox-gl-js/v1.7.0/mapbox-gl.js')
    link(href='https://api.mapbox.com/mapbox-gl-js/v1.7.0/mapbox-gl.css' rel='stylesheet')
 
 block content
@@ -84,7 +85,6 @@ block content
             p.cta__text= `${tour.duration} days. 1 adventure. Infinite memories. Make it yours today!`
 
             if user
-               - console.log(user);
                button.btn.btn--green.span-all-rows#book-tour(data-tour-id=`${tour.id}`) Book tour now!
             else 
                a.btn.btn--green.span-all-rows(href='/login') Login to book tour
