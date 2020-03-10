@@ -163,11 +163,11 @@ tourSchema.pre(/^find/, function(next) {
   next();
 });
 
-//time log for how long query took
-tourSchema.post(/^find/, function(docs, next) {
-  console.log(`Query took ${Date.now() - this.start}ms`);
-  next();
-});
+// //time log for how long query took
+// tourSchema.post(/^find/, function(docs, next) {
+//   console.log(`Query took ${Date.now() - this.start}ms`);
+//   next();
+// });
 
 //AGGREGATION MIDDLEWARE // "this" points to current aggregation object
 tourSchema.pre('aggregate', function(next) {

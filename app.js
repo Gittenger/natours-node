@@ -7,6 +7,7 @@ const mongoSanitize = require('express-mongo-sanitize');
 const xss = require('xss-clean');
 const hpp = require('hpp');
 const cookieParser = require('cookie-parser');
+const compression = require('compression');
 
 const AppError = require('./utils/appError');
 const globalErrorHandler = require('./controllers/errorController');
@@ -78,11 +79,11 @@ app.use(
   })
 );
 
-//basic console logging middleware -- TEST MIDDLEWARES
-app.use((req, res, next) => {
-  console.log('hello from the middleware 😁');
-  next();
-});
+// //basic console logging middleware -- TEST MIDDLEWARES
+// app.use((req, res, next) => {
+//   // console.log('hello from the middleware 😁');
+//   next();
+// });
 
 //create request time field for use in responses
 app.use((req, res, next) => {
@@ -90,6 +91,9 @@ app.use((req, res, next) => {
   // console.log(req.cookies);
   next();
 });
+
+//COMPRESS RESPONSE
+app.use(compression());
 
 //ROUTES
 //VIEW ROUTER
