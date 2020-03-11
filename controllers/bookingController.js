@@ -60,7 +60,9 @@ const createBookingCheckout = async session => {
       email: session.customer_email
     })
   ).id;
-  const price = session.line_items[0].amount / 100;
+  //display_items to access fields in line_items from created session
+  //line_items when defining session during creation
+  const price = session.display_items[0].amount / 100;
   await Booking.create({ tour, user, price });
 };
 
