@@ -5,6 +5,7 @@ const authController = require('../controllers/authController');
 const { isLoggedIn, protect } = authController;
 
 const {
+  alerts,
   getOverview,
   getTour,
   getLogin,
@@ -14,6 +15,9 @@ const {
 } = viewController;
 
 const router = express.Router();
+
+//allow custom alert messages to be passed into res.locals for all views
+router.use(alerts);
 
 router.get('/', isLoggedIn, getOverview);
 router.get('/tour/:slug', isLoggedIn, getTour);
