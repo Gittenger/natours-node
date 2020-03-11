@@ -1,10 +1,8 @@
 const express = require('express');
 const viewController = require('../controllers/viewController.js');
 const authController = require('../controllers/authController');
-const bookingController = require('../controllers/bookingController');
 
 const { isLoggedIn, protect } = authController;
-const { createBookingCheckout } = bookingController;
 
 const {
   getOverview,
