@@ -17,6 +17,7 @@ const tourRouter = require('./routes/tourRoutes');
 const userRouter = require('./routes/userRoutes');
 const reviewRouter = require('./routes/reviewRoutes');
 const bookingRouter = require('./routes/bookingRoutes');
+const bookingController = require('./controllers/bookingController');
 
 ///////////////////////////////////////
 //INITIALIZE APP AND SET VIEW ENGINE
@@ -52,6 +53,17 @@ const limiter = rateLimit({
   message: 'Too many requests from this IP, please try again in one hour'
 });
 app.use('/api', limiter);
+
+//parse body to raw format for stripe webhook processing
+//must be before body parser turns body to json, stripe wont work with json
+//see stripe docs for more details
+app.post(
+  '/webhook-checkout',
+  express.raw({
+    type: 'application/json'
+  }),
+  bookingController.webhookCheckout
+);
 
 //BODY PARSER -- READ DATA FROM BODY INTO REQ.BODY
 app.use(
