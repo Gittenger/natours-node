@@ -1,9 +1,9 @@
 const dotenv = require('dotenv');
 //config dotenv before requiring app file
-dotenv.config({ path: './config.env' });
+dotenv.config();
 const mongoose = require('mongoose');
 
-process.on('uncaughtException', err => {
+process.on('uncaughtException', (err) => {
   console.log(err.name, err.message);
   console.log('UNCAUGHT EXCEPTION! 💥 Shutting down...');
   process.exit(1);
@@ -20,9 +20,9 @@ const DB = process.env.DATABASE.replace(
 mongoose
   .connect(DB, {
     useNewUrlParser: true,
-    useCreateIndex: true,
-    useFindAndModify: false,
-    useUnifiedTopology: true
+    // useCreateIndex: true,
+    // useFindAndModify: false,
+    useUnifiedTopology: true,
     //for checking db connection errors
     // useUnifiedTopology: false
   })
@@ -35,7 +35,7 @@ const server = app.listen(port, () => {
   console.log(`app running on port ${port}...`);
 });
 
-process.on('unhandledRejection', err => {
+process.on('unhandledRejection', (err) => {
   console.log(err.name, err.message);
   console.log('UNHANDLED REJECTION! 💥 Shutting down...');
   //close server, then end application
