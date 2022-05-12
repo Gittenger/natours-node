@@ -1,6 +1,6 @@
 /*eslint-disable*/
 
-import '@babel/polyfill';
+import 'core-js/stable';
 import { displayMap } from './mapbox';
 import { login, logout } from './login';
 import { updateSettings } from './updateSettings';
@@ -22,7 +22,7 @@ if (mapBox) {
 }
 
 if (loginForm) {
-  loginForm.addEventListener('submit', e => {
+  loginForm.addEventListener('submit', (e) => {
     e.preventDefault();
     const email = loginForm.querySelector('#email').value;
     const password = loginForm.querySelector('#password').value;
@@ -35,7 +35,7 @@ if (logoutBtn) {
 }
 
 if (userSettingsForm) {
-  userSettingsForm.addEventListener('submit', e => {
+  userSettingsForm.addEventListener('submit', (e) => {
     e.preventDefault();
 
     //construct multipart form data
@@ -48,17 +48,17 @@ if (userSettingsForm) {
 }
 
 if (userPasswordForm) {
-  userPasswordForm.addEventListener('submit', async e => {
+  userPasswordForm.addEventListener('submit', async (e) => {
     e.preventDefault();
     userPasswordForm.querySelector('.btn--save-password').textContent =
       'Updating...';
 
     //getting values
-    const passwordCurrent = userPasswordForm.querySelector('#password-current')
-      .value;
+    const passwordCurrent =
+      userPasswordForm.querySelector('#password-current').value;
     const password = userPasswordForm.querySelector('#password').value;
-    const passwordConfirm = userPasswordForm.querySelector('#password-confirm')
-      .value;
+    const passwordConfirm =
+      userPasswordForm.querySelector('#password-confirm').value;
 
     //update db
     await updateSettings(
@@ -76,7 +76,7 @@ if (userPasswordForm) {
 }
 
 if (bookBtn) {
-  bookBtn.addEventListener('click', e => {
+  bookBtn.addEventListener('click', (e) => {
     e.target.textContent = 'Processing...';
     const { tourId } = e.target.dataset;
     bookTour(tourId);
